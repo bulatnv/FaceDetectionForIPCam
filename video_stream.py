@@ -4,6 +4,8 @@
 # @Last Modified by:   Bulatnv88
 # @Last Modified time: 2019-10-30 22:06:32
 import os
+from time import time
+from datetime import datetime
 import cv2
 import dlib
 import numpy as np
@@ -136,6 +138,7 @@ def predict(width, height, confidences, boxes, prob_threshold, iou_threshold=0.5
 
 
 def process_video_stream(stream=0):
+
     # load distance
     with open("embeddings/embeddings.pkl", "rb") as f:
         (saved_embeds, names) = pickle.load(f)
@@ -156,11 +159,11 @@ def process_video_stream(stream=0):
             while True:
                 fps = video_capture.get(cv2.CAP_PROP_FPS)
                 ret, frame = video_capture.read()
-                # cv2.imshow('test', ret)
-                # cv2.waitKey()
+                # Cropping selected area on camera image
+                # frame = frame[100: 580, 367:1007]
                 # preprocess faces
                 h, w, _ = frame.shape
-                print(h, w)
+                # print(h, w)
                 img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 img = cv2.resize(img, (640, 480))
                 img_mean = np.array([127, 127, 127])
@@ -216,9 +219,16 @@ def process_video_stream(stream=0):
                         x1, y1, x2, y2 = box
                         cv2.rectangle(frame, (x1, y1), (x2, y2), (80, 18, 236), 1)  # (80, 18, 236)
                         # Draw a label with a name below the face
-                        cv2.rectangle(frame, (x1, y2 - 20), (x2, y2), (80, 18, 236), cv2.FILLED)
+                        cv2.rectangle(frame, (x1, y2), (x2, y2 + 20), (80, 18, 236), cv2.FILLED)
                         font = cv2.FONT_HERSHEY_DUPLEX
-                        cv2.putText(frame, text, (x1 + 6, y2 - 6), font, 0.3, (255, 255, 255), 1)
+                        cv2.putText(frame, text, (x1 + 6, y2 + 14), font, 0.3, (255, 255, 255), 1)
+
+                    if "unknown" in predictions:
+                        cv2.imwrite('log/' + str(datetime.fromtimestamp(time())) + '.jpg', frame,
+                                    [int(cv2.IMWRITE_JPEG_QUALITY), 75])
+                    with open('log/log.txt', 'a+', encoding="utf-8") as f:
+                        for person in predictions:
+                            f.writelines(person + '\t' + str(datetime.fromtimestamp(time())) + str(i) + '\n')
 
                 cv2.imshow('Video', frame)
 
@@ -229,3 +239,6 @@ def process_video_stream(stream=0):
     # Release video stream
     video_capture.release()
     cv2.destroyAllWindows()
+
+
+process_video_stream(0)
