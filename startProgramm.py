@@ -21,6 +21,7 @@ class Video(video, QMainWindow):
         self.pushButton_11.clicked.connect(self.start)
 
     def start(self):
+        self.hide()
         process_video_stream(self.lineEdit.text())
 
     def openFileNameDialog(self):
