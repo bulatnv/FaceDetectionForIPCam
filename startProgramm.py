@@ -9,7 +9,7 @@ from interface.removeUser import RemoveUserI
 from interface.camera import Camera
 from interface.sql import select_user_sql, add_user_sql, remove_user_sql
 from interface.video import Ui_MainWindow as video
-#from video_stream import process_video_stream
+from video_stream import process_video_stream
 
 
 
