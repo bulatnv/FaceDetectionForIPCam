@@ -216,9 +216,9 @@ def process_video_stream(stream=0):
                         x1, y1, x2, y2 = box
                         cv2.rectangle(frame, (x1, y1), (x2, y2), (80, 18, 236), 1)  # (80, 18, 236)
                         # Draw a label with a name below the face
-                        # cv2.rectangle(frame, (x1, y2 - 20), (x2, y2), (80, 18, 236), cv2.FILLED)
-                        # font = cv2.FONT_HERSHEY_DUPLEX
-                        # cv2.putText(frame, text, (x1 + 6, y2 - 6), font, 0.3, (255, 255, 255), 1)
+                        cv2.rectangle(frame, (x1, y2 - 20), (x2, y2), (80, 18, 236), cv2.FILLED)
+                        font = cv2.FONT_HERSHEY_DUPLEX
+                        cv2.putText(frame, text, (x1 + 6, y2 - 6), font, 0.3, (255, 255, 255), 1)
 
                 cv2.imshow('Video', frame)
 
