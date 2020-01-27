@@ -14,6 +14,17 @@ import onnx
 import onnxruntime as ort
 from onnx_tf.backend import prepare
 
+onnx_path = 'models/ultra_light/ultra_light_models/ultra_light_640.onnx'
+onnx_model = onnx.load(onnx_path)
+predictor = prepare(onnx_model)
+ort_session = ort.InferenceSession(onnx_path)
+input_name = ort_session.get_inputs()[0].name
+
+shape_predictor = dlib.shape_predictor('models/facial_landmarks/shape_predictor_5_face_landmarks.dat')
+fa = face_utils.facealigner.FaceAligner(shape_predictor, desiredFaceWidth=112, desiredLeftEye=(0.3, 0.3))
+
+threshold = 0.5
+
 
 def area_of(left_top, right_bottom):
     """
@@ -125,17 +136,6 @@ def predict(width, height, confidences, boxes, prob_threshold, iou_threshold=0.5
 
 
 def process_video_stream(stream=0):
-    onnx_path = 'models/ultra_light/ultra_light_models/ultra_light_640.onnx'
-    onnx_model = onnx.load(onnx_path)
-    predictor = prepare(onnx_model)
-    ort_session = ort.InferenceSession(onnx_path)
-    input_name = ort_session.get_inputs()[0].name
-
-    shape_predictor = dlib.shape_predictor('models/facial_landmarks/shape_predictor_5_face_landmarks.dat')
-    fa = face_utils.facealigner.FaceAligner(shape_predictor, desiredFaceWidth=112, desiredLeftEye=(0.3, 0.3))
-
-    threshold = 0.5
-
     # load distance
     with open("embeddings/embeddings.pkl", "rb") as f:
         (saved_embeds, names) = pickle.load(f)
