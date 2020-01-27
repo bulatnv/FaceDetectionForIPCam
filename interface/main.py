@@ -100,9 +100,7 @@ class Login_page(Login_page, QMainWindow):
 
     def login(self):
         temp = select_user_sql(self.lineEdit.text())
-        if temp == []:
-            self.passInc.show()
-        elif self.lineEdit.text() == 'admin' and self.lineEdit_2.text() == 'admin':
+        if self.lineEdit.text() == 'admin' and self.lineEdit_2.text() == 'admin':
             self.main_page = Main_pages(self)
             self.main_page.show()
             self.hide()
