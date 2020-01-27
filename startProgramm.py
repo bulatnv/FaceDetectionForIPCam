@@ -8,34 +8,17 @@ from interface.addUser import AddUserI
 from interface.removeUser import RemoveUserI
 from interface.camera import Camera
 from interface.sql import select_user_sql, add_user_sql, remove_user_sql
-from interface.photo import Ui_MainWindow as photo
 from interface.video import Ui_MainWindow as video
 from video_stream import process_video_stream
 
-
-class Photo(photo, QMainWindow):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setupUi(self)
-        self.pushButton_2.clicked.connect(self.openFileNameDialog())
-
-    def openFileNameDialog(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()",
-                                                  "", "All Files (*);;mp4 (*.mp4)", options=options)
-        if fileName:
-            self.lineEdit.setText(fileName)
-        else:
-            self.lineEdit.setText('Path Error')
 
 
 class Video(video, QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
-        self.pushButton_2.clicked.connect(self.openFileNameDialog())
-        self.pushButton.clicked.connect(self.start)
+        self.pushButton_10.clicked.connect(self.openFileNameDialog)
+        self.pushButton_11.clicked.connect(self.start)
 
     def start(self):
         process_video_stream(self.lineEdit.text())
@@ -106,7 +89,6 @@ class Main_pages(Main_page, QMainWindow):
         self.pushButton_7.clicked.connect(self.stream)
         self.addUser = AddUserPage(self)
         self.removeUser = RemoveUserPage(self)
-        self.photo = Photo(self)
         self.video = Video(self)
         self.pushButton_6.clicked.connect(self.exit)
         self.ipCamera = IpCamera(self)
