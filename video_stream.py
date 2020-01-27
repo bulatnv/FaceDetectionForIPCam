@@ -239,6 +239,3 @@ def process_video_stream(stream=0):
     # Release video stream
     video_capture.release()
     cv2.destroyAllWindows()
-
-
-process_video_stream(0)
